@@ -1,7 +1,7 @@
 from rh_renderer.tilespec_renderer import TilespecRenderer
 from rh_renderer.models import AffineModel, Transforms
-from .datasource import DataSource
-from urllib.error import HTTPError
+from datasource import DataSource
+from urllib2 import HTTPError
 from rh_logger import logger
 from copy import deepcopy
 import numpy as np

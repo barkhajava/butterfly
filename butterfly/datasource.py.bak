@@ -2,7 +2,7 @@ import os
 import re
 import cv2
 import h5py
-from . import settings
+import settings
 import numpy as np
 
 class DataSource(object):
@@ -70,7 +70,7 @@ class DataSource(object):
         if cache_index in self._core._cache:
             # Move most recently accesed items to the top
             self._core._cache[cache_index] = self._core._cache.pop(cache_index)
-            print('Loading from cache!')
+            print 'Loading from cache!'
             return self._core._cache[cache_index]
 
         # Load image from given path, check extension
@@ -81,7 +81,7 @@ class DataSource(object):
                 f.visit(datasets.append)
                 tmp_image = f[datasets[0]][()]
         else:
-            print('Current path', cur_path)
+            print 'Current path', cur_path
             tmp_image = cv2.imread(cur_path, 0)
 
         # Resize if necessary, then also store to cache
@@ -108,7 +108,7 @@ class DataSource(object):
 
         # Remove items in cache until everything fits
         while self._core._current_cache_size > self._core._max_cache_size:
-            oldest_item = list(self._core._cache.keys())[0]
+            oldest_item = self._core._cache.keys()[0]
             self._core._current_cache_size -= self._core._cache[
                 oldest_item].size
             del self._core._cache[oldest_item]
@@ -135,7 +135,7 @@ class DataSource(object):
         :param path: the root/path/to/this/data
         :returns: channel of meta info about self
         '''
-        dimensions = dict(list(zip(('x','y','z'),self.get_boundaries())))
+        dimensions = dict(zip(('x','y','z'),self.get_boundaries()))
         return {
             'path': path,
             'name': os.path.basename(path),

@@ -6,7 +6,7 @@ import json
 import logging
 from rh_logger import logger
 import numpy as np
-from . import settings
+import settings
 
 from .datasource import DataSource
 
@@ -59,7 +59,7 @@ class HDF5DataSource(DataSource):
 
         elif path.endswith('.h5'):
             with h5py.File(path, "r") as fd:
-                key0 = list(fd.keys())[0]
+                key0 = fd.keys()[0]
                 self._dtype = fd[key0].dtype
                 return [{
                     K_FILENAME : path,

@@ -1,4 +1,4 @@
-from .datasource import DataSource
+from datasource import DataSource
 import dataspec
 import numpy as np
 from rh_logger import logger
@@ -6,7 +6,7 @@ from rh_renderer.models import AffineModel, Transforms
 from rh_renderer.single_tile_renderer import SingleTileRendererBase
 from rh_renderer.multiple_tiles_renderer import MultipleTilesRenderer
 from scipy.spatial import KDTree
-from urllib.error import HTTPError
+from urllib2 import HTTPError
 
 
 class MultiBeam(DataSource):
