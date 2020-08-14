@@ -13,7 +13,7 @@ import posixpath
 import io
 import zlib
 import rh_logger
-from urllib.error import HTTPError
+from urllib2 import HTTPError
 from . import settings
 from .requestparser import RequestParser
 
@@ -25,6 +25,7 @@ class WebServerHandler(tornado.web.RequestHandler):
     def initialize(self, webserver):
         self._webserver = webserver
 
+    @tornado.web.asynchronous
     @tornado.gen.coroutine
     def get(self, uri):
         '''

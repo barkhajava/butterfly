@@ -1,9 +1,9 @@
-import urllib.parse
+import urlparse
 import os
 import re
 from rh_logger import logger
-import urllib.request, urllib.parse, urllib.error
-from . import settings
+import urllib
+import settings
 
 
 class RequestParser(object):
@@ -27,7 +27,7 @@ class RequestParser(object):
             # Parse OCP request by the '/' splitted request, ind finds the
             # position of '/ocp/'
             ind = request.index('ocp')
-            datapath = '/'.join([_f for _f in request[:ind] if _f])
+            datapath = '/'.join(filter(None, request[:ind]))
 
             # Check for windows systems and undo separator changes in request
             if re.match('[a-zA-Z]:', datapath):
@@ -36,7 +36,7 @@ class RequestParser(object):
                 datapath = os.sep + datapath
 
             # Get rid of %20 and other url escapes
-            datapath = urllib.parse.unquote(datapath)
+            datapath = urllib.unquote(datapath)
 
             try:
                 # Debug output in console for OCP request
@@ -67,7 +67,7 @@ class RequestParser(object):
         else:
             # Parse standard queries using urlparse
             query = '/'.join(request)[1:]
-            parsed_query = urllib.parse.parse_qs(query)
+            parsed_query = urlparse.parse_qs(query)
 
             # Console output for parsed query
             logger.report_event('Parsed query: ' + repr(parsed_query))

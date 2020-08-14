@@ -3,7 +3,7 @@ import glob
 import h5py
 import numpy as np
 from rh_logger import logger
-from .datasource import DataSource
+from datasource import DataSource
 
 class Mojo(DataSource):
 
@@ -40,9 +40,9 @@ class Mojo(DataSource):
         y_tiles = os.path.join(slice_folders[0], 'y=*,x=00000000' + img_ext)
         x_tiles = os.path.join(slice_folders[0], 'y=00000000,x=*' + img_ext)
         num_slices = len(slice_folders)
-        z_ind = list(range(num_slices))
-        y_ind = list(range(len(glob.glob(y_tiles))))
-        x_ind = list(range(len(glob.glob(x_tiles))))
+        z_ind = range(num_slices)
+        y_ind = range(len(glob.glob(y_tiles)))
+        x_ind = range(len(glob.glob(x_tiles)))
         indices = (x_ind, y_ind, z_ind)
 
         # Load info

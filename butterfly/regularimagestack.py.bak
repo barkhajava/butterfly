@@ -1,5 +1,5 @@
 import argparse
-from .datasource import DataSource
+from datasource import DataSource
 import os
 import re
 import glob
@@ -84,8 +84,8 @@ class RegularImageStack(DataSource):
             'x': self._indices[0][x],
             'y': self._indices[1][y],
             'z': self._indices[2][z]}
-        print('\n')
-        print(cur_filename)
+        print '\n'
+        print cur_filename
         cur_path = os.path.join(
             self._datapath,
             self._folderpaths % {

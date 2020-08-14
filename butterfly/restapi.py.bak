@@ -1,5 +1,5 @@
 from tornado.web import RequestHandler
-from urllib.error import HTTPError
+from urllib2 import HTTPError
 import tifffile
 import numpy as np
 import io
@@ -104,12 +104,12 @@ class RestAPIHandler(RequestHandler):
 
     def get_experiments(self):
         '''Handle the /api/experiments GET request'''
-        experiments = settings.BFLY_CONFIG.get(self.EXPERIMENTS, [])
+        experiments = settings.bfly_config.get(self.EXPERIMENTS, [])
         return [_[self.NAME] for _ in experiments]
 
     def _get_experiment_config(self):
         return self._get_config({
-            'parent': settings.BFLY_CONFIG,
+            'parent': settings.bfly_config,
             'plural': self.EXPERIMENTS,
             'param': self.Q_EXPERIMENT,
             'name': 'experiment name'
