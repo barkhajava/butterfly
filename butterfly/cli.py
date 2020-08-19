@@ -32,8 +32,10 @@ def main():
 
     if os.path.isfile(home):
         os.environ['RH_CONFIG_FILENAME'] = home
-    from butterfly import settings,core,webserver
+    from butterfly import core
     from rh_logger import logger
+    from butterfly.logic import settings
+    from butterfly.output.rhoanascope import webserver
 
     port = port if port else settings.PORT
     logger.start_process("bfly", "Starting butterfly server on port {}".format(port), [port])

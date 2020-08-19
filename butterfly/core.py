@@ -2,7 +2,7 @@ import logging
 import numpy as np
 import urllib.request, urllib.error, urllib.parse
 
-from . import settings
+from .logic import settings
 from collections import OrderedDict
 import rh_logger
 
@@ -73,23 +73,23 @@ class Core(object):
         for datasource in settings.DATASOURCES:
             try:
                 if datasource == 'mojo':
-                    from .mojo import Mojo
+                    from .input.mojo import Mojo
                     ds = Mojo(self, datapath)
                     break
                 elif datasource == 'regularimagestack':
-                    from .regularimagestack import RegularImageStack
+                    from .input.regularimagestack import RegularImageStack
                     ds = RegularImageStack(self, datapath)
                     break
                 elif datasource in ("tilespecs"):
-                    from .tilespecs import Tilespecs
+                    from .input.tilespecs import Tilespecs
                     ds = Tilespecs(self, datapath)
                     break
                 elif datasource in ("comprimato", "multibeam"):
-                    from .multibeam import MultiBeam
+                    from .input.multibeam import MultiBeam
                     ds = MultiBeam(self, datapath)
                     break
                 elif datasource == 'hdf5':
-                    from .hdf5 import HDF5DataSource
+                    from .input.hdf5 import HDF5DataSource
                     ds = HDF5DataSource(self, datapath)
                     break
             except ImportError as err:
