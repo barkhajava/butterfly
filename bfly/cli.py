@@ -2,9 +2,15 @@ import re
 import os
 import cv2
 import yaml
-import logging
-import argparse
+import logging as log
 import numpy as np
+import sys, argparse
+
+
+from bfly.output import webserver
+from bfly import logic
+
+
 
 def main():
     '''
@@ -13,13 +19,17 @@ def main():
     Eagon Meng and Daniel Haehn
     Lichtman Lab, 2015
     '''
+    # loaded from the rh-config
+    _bfly_config = logic.settings.BFLY_CONFIG
+
+
+
     help = {
         'bfly': 'Host a butterfly server!',
         'folder': 'relative, absolute, or user path/of/all/experiments',
         'save': 'path of output yaml file indexing experiments',
         'port': 'port >1024 for hosting this server'
     }
-
     parser = argparse.ArgumentParser(description=help['bfly'])
     parser.add_argument('port', type=int, nargs='?', help=help['port'])
     parser.add_argument('-e','--exp', metavar='exp', help= help['folder'])
@@ -32,15 +42,10 @@ def main():
 
     if os.path.isfile(home):
         os.environ['RH_CONFIG_FILENAME'] = home
-    from butterfly import core
-    from rh_logger import logger
-    from butterfly.logic import settings
-    from butterfly.output.rhoanascope import webserver
-
+    from bfly.logic import core
+    from bfly.logic import settings
+    from bfly.output import webserver
     port = port if port else settings.PORT
-    logger.start_process("bfly", "Starting butterfly server on port {}".format(port), [port])
-    logger.report_event("Datasources: " + ", ".join(settings.DATASOURCES),log_level=logging.DEBUG)
-    logger.report_event("Allowed paths: " + ", ".join(settings.ALLOWED_PATHS),log_level=logging.DEBUG)
     c = core.Core()
 
     cat_name = ['root','experiments','samples','datasets','channels']
@@ -51,6 +56,27 @@ def main():
         path_root[-1]['kids'].append(path_root[-2])
     path_root.reverse()
 
+    def parse_argv(self, argv):
+        """Converts argv list to dictionary with defaults.
+
+        Arguments
+        -------
+        argv : list
+            parsed as sys.argv by argparse
+        Returns
+        ---------
+        dict
+            * port (int) -- for :class:`bfly.Webserver`
+            * exp (str) -- path to config or folder of data
+            * out (str) -- path to save config from folder
+        """
+
+        # Get the parser
+        parser = self.get_parser()
+        # Actually parse the arguments
+        parsed = parser.parse_args(argv[1:])
+        return vars(parsed)
+    
     def sourcer(tmp_path, my_path):
         try: c.create_datasource(tmp_path)
         except: return new_kid(my_path)
@@ -150,9 +176,7 @@ def parseNumRange(num_arg):
 
 
 def query():
-    from butterfly import core
-    from rh_logger import logger, ExitCode
-    logger.start_process("bquery", "Starting butterfly query")
+    from bfly.logic import core
     c = core.Core()
 
     # Parser for command-line arguments - to be incorporated separately in a
@@ -269,24 +293,3 @@ def query():
     # Grab the sample volume
     volume = c.get(datapath, start_coord, vol_size, w=zoom_level)
 
-    if vol_size[2] == 1:
-        # Is there a better way to catch errors?
-        try:
-            cv2.imwrite(args.output, volume[:, :, 0].astype('uint8'))
-        except cv2.error:
-            logger.report_exception()
-            logger.end_process('Could not write image',
-                               ExitCode.io_error)
-            exit(-1)
-    else:
-        for i in range(vol_size[2]):
-            try:
-                cv2.imwrite(args.output % i, volume[:, :, i].astype('uint8'))
-            except cv2.error:
-                logger.report_exception()
-                logger.end_process('Could not write image',
-                                   ExitCode.io_error)
-                exit(-1)
-
-    logger.end_process("Wrote cutout with volume = %s" % str(volume.shape),
-                       ExitCode.success)

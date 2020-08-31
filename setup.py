@@ -1,8 +1,14 @@
 #!/usr/bin/env python
+import os
 from setuptools import find_packages
 from setuptools import setup
 
-VERSION = 2.0
+VERSION = 0.3
+version = os.path.join('bfly', '__init__.py')
+
+
+README = open('README.md').read()
+
 INSTALL_REQ = [
     'h5py>=2.6.0',
     'scipy>=0.17.0'
@@ -12,6 +18,7 @@ INSTALL_REQ = [
     'pyaml>=16.12.2',
     'tifffile>=0.11.1',
     'pymongo>=3.4.0',
+
 ]
 
 setup(
@@ -26,6 +33,7 @@ setup(
     install_requires= INSTALL_REQ,
     # Allows command line execution
     entry_points=dict(console_scripts=[
-        'bfly = bfly.__main__:bfly'
+        'bfly = bfly.cli:main',
+        'bfly_query = bfly.cli:query',
     ])
 )
