@@ -1,4 +1,0 @@
-include butterfly/output/static/index.html
-include butterfly/output/static/*.js
-include butterfly/output/static/images/*.png
-include README.md
