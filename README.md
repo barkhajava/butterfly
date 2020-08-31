@@ -7,7 +7,7 @@
 ## Installation
 ```bash
 $ git clone https://github.com/Rhoana/butterfly.git
-$ pip install --process-dependency-links  -e .
+$ pip install -e .
 ```
 
 ## Usage
@@ -37,8 +37,7 @@ the display include a home button that resets zoom and pan.
 bfly uses rh_config which gets its configuration by default from
 ~/.rh-config.yaml. You can change this by setting the environment variable,
 RH_CONFIG_FILENAME, to the name of the config file you want to use. bfly
-uses two configuration sections, "bfly" and "rh_logger" (rh_logger is
-documented here: https://github.com/rhoana/rh_logger). The bfly section
+uses one configuration section, "bfly" . The bfly section
 has the following structure:
 
     bfly:

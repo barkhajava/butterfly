@@ -3,8 +3,8 @@ import os
 from setuptools import find_packages
 from setuptools import setup
 
-VERSION = 0.2
-version = os.path.join('butterfly', '__init__.py')
+VERSION = 0.3
+version = os.path.join('bfly', '__init__.py')
 
 
 README = open('README.md').read()
@@ -18,7 +18,7 @@ INSTALL_REQ = [
     'pyaml>=16.12.2',
     'tifffile>=0.11.1',
     'pymongo>=3.4.0',
-	'rh_logger>=2.0.0',
+
 ]
 
 setup(
@@ -33,7 +33,7 @@ setup(
     install_requires= INSTALL_REQ,
     # Allows command line execution
     entry_points=dict(console_scripts=[
-        'bfly = butterfly.cli:main',
-        'bfly_query = butterfly.cli:query',
+        'bfly = bfly.cli:main',
+        'bfly_query = bfly.cli:query',
     ])
 )
